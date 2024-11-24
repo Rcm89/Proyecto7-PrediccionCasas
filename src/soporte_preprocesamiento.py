@@ -13,6 +13,14 @@ import math
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+# Métodos estadísticos
+# -----------------------------------------------------------------------
+from scipy.stats import zscore  # para calcular el z-score
+from sklearn.neighbors import LocalOutlierFactor  # para detectar outliers usando el método LOF
+from sklearn.ensemble import IsolationForest  # para detectar outliers usando el método IF
+from sklearn.neighbors import NearestNeighbors  # para calcular la epsilon
+from sklearn.preprocessing import MinMaxScaler, Normalizer, StandardScaler, RobustScaler
+
 def exploracion_datos(dataframe):
 
     """
@@ -261,3 +269,26 @@ class Visualizador:
                     mask = mask)
     
 
+def escalar_datos(data, cols, metodo="robust"):
+    """
+    Escala los datos de las columnas seleccionadas utilizando diferentes métodos de escalado.
+
+    Parameters:
+        data (pd.DataFrame): DataFrame con datos.
+        cols (list): Lista de nombres de las columnas a escalar.
+        metodo (str): Método de escalado ("minmax", "robust", "standard", "norm"). Default "robust".
+    
+    Returns:
+        pd.DataFrame, object: DataFrame escalado y el scaler utilizado.
+    """
+    if metodo == "minmax":
+        scaler = MinMaxScaler()
+    elif metodo == "robust":
+        scaler = RobustScaler()
+    elif metodo == "standard":
+        scaler = StandardScaler()
+    elif metodo == "norm":
+        return normalize_scaler(data[cols]), None
+    
+    df_scaled = pd.DataFrame(scaler.fit_transform(data[cols]), columns=cols, index=data.index)
+    return df_scaled, scaler
