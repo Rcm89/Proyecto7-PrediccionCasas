@@ -154,60 +154,46 @@ class AnalisisModelosRegresion:
         return importancia_df
     
 
-    def metricas(y_train, y_train_pred, y_test, y_test_pred):
-        """
-        Calcula métricas de evaluación para modelos de regresión sobre los datos de entrenamiento y prueba.
+def metricas(y_train, y_train_pred, y_test, y_test_pred):
+    """
+    Calcula métricas de evaluación para modelos de regresión sobre los datos de entrenamiento y prueba.
 
-        Parameters:
-        ----------
-        y_train : array-like
-            Valores reales del conjunto de entrenamiento.
-        y_train_pred : array-like
-            Valores predichos por el modelo para el conjunto de entrenamiento.
-        y_test : array-like
-            Valores reales del conjunto de prueba.
-        y_test_pred : array-like
-            Valores predichos por el modelo para el conjunto de prueba.
+    Parameters:
+    ----------
+    y_train : pandas.core.frame.DataFrame
+        Valores reales del conjunto de entrenamiento.
+    y_train_pred : pandas.core.frame.DataFrame
+        Valores predichos por el modelo para el conjunto de entrenamiento.
+    y_test : pandas.core.frame.DataFrame
+        Valores reales del conjunto de prueba.
+    y_test_pred : pandas.core.frame.DataFrame
+        Valores predichos por el modelo para el conjunto de prueba.
 
-        Returns:
-        -------
-        pandas.DataFrame
-            DataFrame con las métricas de evaluación calculadas, organizado en dos categorías:
-            - 'train': Métricas para el conjunto de entrenamiento.
-            - 'test': Métricas para el conjunto de prueba.
-        
-        Métricas calculadas:
-            - r2_score: Coeficiente de determinación (R²), mide el ajuste del modelo.
-            - MAE: Error absoluto medio (Mean Absolute Error).
-            - MSE: Error cuadrático medio (Mean Squared Error).
-            - RMSE: Raíz del error cuadrático medio (Root Mean Squared Error).
-
-        Example:
-        -------
-        >>> from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
-        >>> import numpy as np
-        >>> import pandas as pd
-        >>> y_train = [3, -0.5, 2, 7]
-        >>> y_train_pred = [2.5, 0.0, 2, 8]
-        >>> y_test = [2.5, 0.0, 2, 8]
-        >>> y_test_pred = [3, -0.5, 2, 7]
-        >>> metricas(y_train, y_train_pred, y_test, y_test_pred)
-                    r2_score       MAE       MSE      RMSE
-        train    0.948608  0.5  0.375  0.612372
-        test     0.948608  0.5  0.375  0.612372
-        """
-        metricas = {
-            'train': {
-                'r2_score': r2_score(y_train, y_train_pred),
-                'MAE': mean_absolute_error(y_train, y_train_pred),
-                'MSE': mean_squared_error(y_train, y_train_pred),
-                'RMSE': np.sqrt(mean_squared_error(y_train, y_train_pred))
-            },
-            'test': {
-                'r2_score': r2_score(y_test, y_test_pred),
-                'MAE': mean_absolute_error(y_test, y_test_pred),
-                'MSE': mean_squared_error(y_test, y_test_pred),
-                'RMSE': np.sqrt(mean_squared_error(y_test, y_test_pred))
-            }
+    Returns:
+    -------
+    pandas.DataFrame
+        DataFrame con las métricas de evaluación calculadas, organizado en dos categorías:
+        - 'train': Métricas para el conjunto de entrenamiento.
+        - 'test': Métricas para el conjunto de prueba.
+    
+    Métricas calculadas:
+        - r2_score: Coeficiente de determinación (R²), mide el ajuste del modelo.
+        - MAE: Error absoluto medio (Mean Absolute Error).
+        - MSE: Error cuadrático medio (Mean Squared Error).
+        - RMSE: Raíz del error cuadrático medio (Root Mean Squared Error).
+    """
+    metricas = {
+        'train': {
+            'r2_score': r2_score(y_train, y_train_pred),
+            'MAE': mean_absolute_error(y_train, y_train_pred),
+            'MSE': mean_squared_error(y_train, y_train_pred),
+            'RMSE': np.sqrt(mean_squared_error(y_train, y_train_pred))
+        },
+        'test': {
+            'r2_score': r2_score(y_test, y_test_pred),
+            'MAE': mean_absolute_error(y_test, y_test_pred),
+            'MSE': mean_squared_error(y_test, y_test_pred),
+            'RMSE': np.sqrt(mean_squared_error(y_test, y_test_pred))
         }
-        return pd.DataFrame(metricas).T
+    }
+    return pd.DataFrame(metricas).T
