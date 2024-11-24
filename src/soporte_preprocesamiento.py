@@ -114,6 +114,7 @@ class Visualizador:
         plt.suptitle("Distribución de variables numéricas")
         plt.tight_layout();
 
+    '''
     def plot_categoricas(self, color="grey", tamano_grafica=(40, 15)):
         """
         Grafica la distribución de las variables categóricas del DataFrame.
@@ -134,6 +135,46 @@ class Visualizador:
 
         plt.tight_layout()
         plt.suptitle("Distribución de variables categóricas")
+
+    '''
+    def plot_categoricas(self, color="grey", tamano_grafica=(20, 15), espaciado_filas=2):
+        """
+        Grafica la distribución de las variables categóricas del DataFrame.
+
+        Parameters:
+        - color (str, opcional): El color a utilizar en las gráficas. Por defecto es "grey".
+        - tamano_grafica (tuple, opcional): El tamaño de la figura de la gráfica. Por defecto es (20,15)
+        - espaciado_filas (float, opcional): Espaciado entre filas de gráficas. Por defecto es 1.5.
+        """
+        dataframe_cat = self.separar_dataframes()[1]
+        
+        # Cambiar las dimensiones de los subplots: 2 gráficas por fila
+        filas = math.ceil(len(dataframe_cat.columns) / 2)
+        _, axes = plt.subplots(filas, 2, figsize=tamano_grafica)
+        axes = axes.flat
+        
+        for indice, columna in enumerate(dataframe_cat.columns):
+            sns.countplot(
+                x=columna, 
+                data=self.dataframe, 
+                order=self.dataframe[columna].value_counts().index, 
+                ax=axes[indice], 
+                color=color
+            )
+            axes[indice].tick_params(rotation=90)
+            axes[indice].set_title(columna)
+            axes[indice].set(xlabel=None)
+        
+        # Ocultar ejes sobrantes si hay menos columnas que subplots
+        for i in range(len(dataframe_cat.columns), len(axes)):
+            axes[i].axis("off")
+        
+        # Ajustar el espacio entre filas de las gráficas
+        plt.subplots_adjust(hspace=espaciado_filas)
+        
+        plt.tight_layout()
+        plt.suptitle("Distribución de variables categóricas", y=1.02)
+
 
     
     def relacion_numericas(self, variable_dependiente, tamanio=(15,8), paleta="mako"):
