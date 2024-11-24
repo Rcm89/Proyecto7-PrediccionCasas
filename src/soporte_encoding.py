@@ -62,6 +62,9 @@ class Analisis_Visual_Encoding:
                         whis=whis,
                         flierprops={'markersize': 4, 'markerfacecolor': 'orange'})
             axes[indice].tick_params(rotation=90)
+        
+        for indice in range(len(self.lista_variables_categorias), len(axes)):
+            fig.delaxes(axes[indice])  # Eliminar los ejes no utilizados   
 
         fig.tight_layout()
 
@@ -90,8 +93,13 @@ class Analisis_Visual_Encoding:
                           errorbar= 'ci')
             
             axes[indice].tick_params(rotation=90)
-            axes[indice].get_legend().remove() # eliminamos la leyenda de las gráficas
+            legend = axes[indice].get_legend()
+            if legend is not None:
+                legend.remove()
 
+        for indice in range(len(self.lista_variables_categorias), len(axes)):
+            fig.delaxes(axes[indice])  # Eliminar los ejes no utilizados    
+        
 
         fig.tight_layout()
 
@@ -330,11 +338,10 @@ class Encoding:
         - frequency_encoding(): Realiza codificación de frecuencia en las columnas especificadas en el diccionario de codificación.
     """
 
-    def __init__(self, dataframe, diccionario_encoding, cols, variable_respuesta):
+    def __init__(self, dataframe, diccionario_encoding, variable_respuesta):
         self.dataframe = dataframe
         self.diccionario_encoding = diccionario_encoding
         self.variable_respuesta = variable_respuesta
-        self.cols = cols
     
     def one_hot_encoding(self):
         """
@@ -344,8 +351,8 @@ class Encoding:
             - dataframe: DataFrame de pandas, el DataFrame con codificación one-hot aplicada.
         """
         # accedemos a la clave de 'onehot' para poder extraer las columnas a las que que queramos aplicar OneHot Encoding. En caso de que no exista la clave, esta variable será una lista vacía
-        col_encode = self.diccionario_encoding.get("onehot", {})
-        
+        col_encode = self.diccionario_encoding.get("onehot", [])
+
         # si hay contenido en la lista 
         if col_encode:
 
@@ -434,7 +441,7 @@ class Encoding:
         """
 
         # accedemos a la clave de 'label' para poder extraer las columnas a las que que queramos aplicar Label Encoding. En caso de que no exista la clave, esta variable será una lista vacía
-        col_encode = self.diccionario_encoding.get("label", {})
+        col_encode = self.diccionario_encoding.get("label", [])
 
         # si hay contenido en la lista 
         if col_encode:
@@ -449,27 +456,32 @@ class Encoding:
 
     def target_encoding(self):
         """
-        Realiza codificación target en las columnas especificadas.
+        Realiza codificación target en la variable especificada en el diccionario de codificación.
 
         Returns:
-        - dataframe: DataFrame de pandas con la codificación target aplicada.
+        - dataframe: DataFrame de pandas, el DataFrame con codificación target aplicada.
         """
-    
-        target_encoder = TargetEncoder()
-    
-        cols_to_encode = self.cols   
+        
+        # accedemos a la clave de 'target' para poder extraer las columnas a las que que queramos aplicar Target Encoding. En caso de que no exista la clave, esta variable será una lista vacía
+        col_encode = self.diccionario_encoding.get("target", [])
 
-        encoded_data = target_encoder.fit_transform(
-            self.dataframe[cols_to_encode],
-            self.dataframe[self.variable_respuesta]
-        )
+        # si hay contenido en la lista 
+        if col_encode:
 
-        encoded_df = pd.DataFrame(
-            encoded_data,
-            columns=cols_to_encode,
-            index=self.dataframe.index
-        )
-        self.dataframe[cols_to_encode] = encoded_df
+            # instanciamos la clase 
+            target_encoder = TargetEncoder(smooth="auto")
+
+            # transformamos los datos de las columnas almacenadas en la variable col_code y añadimos la variable respuesta para que calcule la media ponderada para cada categória de las variables
+            target_encoder_trans = target_encoder.fit_transform(self.dataframe[[self.variable_respuesta]], self.dataframe[col_encode])
+            
+            # creamos un DataFrame con los resultados de la transformación
+            target_encoder_df = pd.DataFrame(target_encoder_trans, columns=target_encoder.get_feature_names_out())
+
+            # eliminamos las columnas originales
+            self.dataframe.drop(col_encode, axis=1, inplace=True)
+
+            # concatenamos los dos DataFrames
+            self.dataframe = pd.concat([self.dataframe.reset_index(drop=True), target_encoder_df], axis=1)
 
         return self.dataframe
 
@@ -497,3 +509,4 @@ class Encoding:
                 self.dataframe[categoria] = self.dataframe[categoria].map(frecuencia)
         
         return self.dataframe
+    
