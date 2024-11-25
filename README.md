@@ -1,6 +1,4 @@
-   <div style="text-align: center;">
-      <img src="https://github.com/santiagorodriguez-dev/Proyecto7-PrediccionCasas/blob/main/images/imagen.png" alt="esquema" />
-   </div>
+![Casa](images/foto_casa.jpg)
 
 # Proyecto: Predicción de Precios de Casas 🏠
 
@@ -14,52 +12,61 @@ El mercado inmobiliario es dinámico y está influenciado por múltiples variabl
 
 ## Pasos para el Desarrollo 
 
-1. **Carga y Exploración del Dataset**
+1. **EDA y tratamiento de nulos**
 
    - Seleccion de datos solo de madrid
-   - extraccion de datos en columnas con diccionarios dentro.
-   - borrado de duplicados
-   - columnas seleccionadas para el analisis:
-   - price ,propertyType, operation, size, exterior, rooms,
-     bathrooms, municipality, status, newDevelopment, priceByArea,
-     floor, district, neighborhood, hasLift, hasParkingSpace,
-     typology, subTypology
-
+    
+   - Analisis exploratorio de los datos.
+    
+   - Eliminación de duplicados
+     
+   - selección de columnas numéricas y categóricas para el analisis
+     
+   - Identificación de nulos
+     
+   - Imputacion de nulos
+   
 2. **Preprocesamiento de Datos**
 
-   - Test de imputacion de nulos con knn y imputer, mismo resultado nos quedamos con knn.
+   - Encoding con One_Hot_Encoding y Target_Encoder
 
-   - Imputacion de todas las categoricas con nulos con categoria "Unknown".
+   - Estandarización de variables con RobustScaler.
 
-   - Enconding con target.
-
-   - imputar numericos outliers con mediana
+   - Identificación de outliers univariados y multivariados.
+  
+   - Imputación de outliers con la mediana
      
-   - Despues de testear RobustScaler, MinMaxScaler, Normalizer, StandardScaler, nos quedamos con Normalizer
-     para la estandarizacion.
+  3. **Construcción del Modelo**
 
-3. **Construcción del Modelo**
+   - Test con DecisionTreeRegressor, RandomForestRegressor, RandomForestRegressor, XGBRegressor.
 
-   - Test con DecisionTreeRegressor, RandomForestRegressor, GradientBoostingRegressor, XGBRegressor.
+   - Modelo 1: Regresion Lineal
 
-4. **Visualización de Resultados**
+   - Modelo 2: KFold
 
-   - Mejor resultado RandomForestRegressor.
-     
-     <div style="text-align: center;">
-        <img src="https://github.com/santiagorodriguez-dev/Proyecto7-PrediccionCasas/blob/main/images/R1.PNG" alt="esquema" />
-     </div>
-      <br>
-     <div style="text-align: center;">
-        <img src="https://github.com/santiagorodriguez-dev/Proyecto7-PrediccionCasas/blob/main/images/R2.PNG" alt="esquema" />
-     </div>
-      <br>
-      <div style="text-align: center;">
-        <img src="https://github.com/santiagorodriguez-dev/Proyecto7-PrediccionCasas/blob/main/images/output.png" alt="esquema" />
-     </div>
+   - Modelo 3: DecisionTreeRegressor
+
+   - Modelo 4: RandomForestRegressor
+
+   - Modelo 5: GradientBoostingRegressor
+
+   - Modelo 6: XGBRegressor
+
      
 #### Propuestas de Mejora:
-   - Realizar varios modelos de pruebas, añadiendo, quitando columnas del dataset.
+
+   - Tratar de mejorar el modelo, seleccionando algunas columnas distintas en el prerprocesamiento.
+
+   - Corregir tendencia al overfitting
+
+   - Variar el orden en el preprocesamiento, haciendo la gestión de outliers y la estandarización antes del encoding.
+     
+   - Mejorar la calidad de algunas visualizaciones.
+
+   - Generar más modelos predictivos
+
+   - Mejorar la organización de los notebooks del repositorio.
+
   
 ## Construido con 🛠️
 
@@ -70,7 +77,7 @@ El mercado inmobiliario es dinámico y está influenciado por múltiples variabl
 * [pandas](https://pandas.pydata.org/docs/) - pandas
 * [Visual Studio Code](https://code.visualstudio.com/) - IDE desarrollo
   
-## Autores ✒️
+## Autor ✒️
 
-* **Santiago Rodriguez** - [santiagorodriguez-dev](https://github.com/santiagorodriguez-dev)
+* **Rafael Castellot de Miguel** - [rcm89](https://github.com/Rcm89)
 
