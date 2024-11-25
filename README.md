@@ -1,4 +1,4 @@
-![Casa](images/foto_casa.jpg)
+![Casa](images/foto-casa.jpeg)
 
 # Proyecto: Predicción de Precios de Casas 🏠
 
